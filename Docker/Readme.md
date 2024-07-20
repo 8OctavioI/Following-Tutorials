@@ -9,4 +9,6 @@ Progress:
 3. Running A simple Website off an apache server: Done.
 4. Running a simple node.js server: Done.
 5. Running a simple PHP server: Done. 
+6. Running a simple MySQL database: Done.
+
 
