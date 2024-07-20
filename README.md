@@ -1,2 +1,1 @@
-# Following-Tutorials
-Projects Done by Following Tutorials
+This repository contains Projects completed by following Tutorials

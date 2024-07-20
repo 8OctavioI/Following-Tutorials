@@ -1,0 +1,3 @@
+docker run --name mysqli -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=first mysql
+
+Run this command to start a mysql server
