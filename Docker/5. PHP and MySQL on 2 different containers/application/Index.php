@@ -7,7 +7,7 @@
 </head>
 <body>
 <?php
-   $host_name = '172.17.0.2';
+   $host_name = 'mysql-instance';
    $user = 'root';
    $password = '1234';
    $database='appdb';
