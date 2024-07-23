@@ -101,6 +101,29 @@ Progress:
 
     docker run -d -p 80:80 --rm --network [network-name] --name php-instance [image-name-2]
 
+9. Using Copy and Execute commands on an existing container: Done.
+    
+    Create the PHP and MySQL instances from previous setup. 
+
+    Update the MySQL instance by copying a sql file from system to container and running it in container:
+
+        docker exec [mysql-instance] mysql -u root -p appdb -e "USE appdb;"
+
+        docker exec [mysql-instance] mysql -u root -p appdb -e "CREATE TABLE Course(CourseID int,   CourseName varchar(1000),Rating numeric(2,1));"
+
+        docker exec [mysql-instance] mysql -u root -p appdb -e "INSERT INTO Course(CourseID,CourseName,Rating) VALUES(1, 'Docker and Kubernetes',4.5);"
+
+    Reload site to view changes. 
+
+10. Using Bind Mount to mount a folder on the base system to a folder on the container (Can be used when 2 containers need access to the same information):
+        docker run -d -p 80:80 --mount type=bind,source=[source-path],target=[destination-path] --name [container-name] [image-name]
+
+        ex: docker run -d -p 80:80 --mount type=bind,source=/home/project/Projects/Docker/6.\ PHP\ application\ with\ bind\ mounts,target=/var/www/html --name php-instance php:8.2-apache
+
+        Now Update the files in host system and the files in the container will reflect that. 
+
+        
+
 
 9. Other important commands:
 
@@ -125,3 +148,7 @@ Progress:
     
 
     docker rmi [image-name] : Deletes specified image
+
+    docker cp [source-path] [container-name]:[destination-path] : Use this command to copy files from system to container after creation of container
+
+    docker exec -it [container-name] [command] : Execute a command in running container. it flag stands for interactive mode
