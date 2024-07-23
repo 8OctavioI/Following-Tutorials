@@ -115,13 +115,45 @@ Progress:
 
     Reload site to view changes. 
 
-10. Using Bind Mount to mount a folder on the base system to a folder on the container (Can be used when 2 containers need access to the same information): Done.
+10. Using Bind Mount to mount a folder on the base system to a folder on the container: Done.
 
     docker run -d -p 80:80 --mount type=bind,source=[source-path],target=[destination-path] --name [container-name] [image-name]
 
     ex: docker run -d -p 80:80 --mount type=bind,source=/home/project/Projects/Docker/6.\ PHP\ application\ with\ bind\ mounts,target=/var/www/html --name php-instance php:8.2-apache
 
     Now Update the files in host system and the files in the container will reflect that. 
+
+    Note: Can be used in development stages, but is not recommended during deployment.
+
+11. Using volumes for persistent storage: 
+    
+    Note: This can be used in deployment to share storage between containers. 
+
+    docker volume create [volume-name]
+
+    Note: For MySQL images, any file that is put in /docker-entrypoint-initdb.d/ will be executed on image creation. 
+
+    Create Dockerfile {
+
+        FROM mysql as base
+
+        ENV MYSQL_ROOT_PASSWORD=[root-password]
+
+        ENV MYSQL_DATABASE=[database-name]
+
+        COPY 01.sql /docker-entrypoint-initdb.d/
+
+    }
+
+    docker build -t [image-name] .
+
+    docker run -d -p 3306:3306 --name [container-name] --rm -v [volume-name]:[target-location-path] [image-name]
+
+    Update the database as you wish. 
+
+    Delete container and create new one, and as long as the volume is mounted the data will persist. 
+
+
 
         
 
