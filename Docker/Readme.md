@@ -115,7 +115,8 @@ Progress:
 
     Reload site to view changes. 
 
-10. Using Bind Mount to mount a folder on the base system to a folder on the container (Can be used when 2 containers need access to the same information):
+10. Using Bind Mount to mount a folder on the base system to a folder on the container (Can be used when 2 containers need access to the same information): Done.
+
     docker run -d -p 80:80 --mount type=bind,source=[source-path],target=[destination-path] --name [container-name] [image-name]
 
     ex: docker run -d -p 80:80 --mount type=bind,source=/home/project/Projects/Docker/6.\ PHP\ application\ with\ bind\ mounts,target=/var/www/html --name php-instance php:8.2-apache
