@@ -153,7 +153,30 @@ Progress:
 
     Delete container and create new one, and as long as the volume is mounted the data will persist. 
 
+12. Using Docker Compose: 
 
+    Build all necessary images. 
+
+    Create Docker compose file.
+
+    docker-compose.yaml {
+            services:
+              [app-name]:
+                container_name: [container-name]
+                image: [image-name]
+                ports: 
+                  -  "[port1]:[port2]"
+              [service-2-name]:
+                container-name: [container-name-2]
+                image: [image-name-2]
+                ports:
+                  -  "[port1]:[port2]"
+                  
+    }
+
+    docker compose up -d : To run all necessary containers.
+
+    docker compose down  : To stop and remove all services. 
 
         
 
@@ -185,3 +208,5 @@ Progress:
         docker cp [source-path] [container-name]:[destination-path] : Use this command to copy files from system to container after creation of container
 
         docker exec -it [container-name] [command] : Execute a command in running container. it flag stands for interactive mode
+
+        docker compose ps -a : Lists all running services. 
