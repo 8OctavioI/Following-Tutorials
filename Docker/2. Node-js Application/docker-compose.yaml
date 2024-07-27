@@ -1,0 +1,7 @@
+services:
+  basic-njs-app:
+    image: njsapp:v3
+    ports:
+      - "80:80"
+    container_name: njs-instance
+    

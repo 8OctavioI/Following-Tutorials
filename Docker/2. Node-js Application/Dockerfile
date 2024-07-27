@@ -4,6 +4,8 @@ RUN mkdir Application
 
 COPY . /Application
 
+WORKDIR /Application
+
 EXPOSE 80
 
-CMD ["node", "./Application/server.js"]
+CMD ["node", "server.js"]
