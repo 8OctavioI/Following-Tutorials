@@ -153,7 +153,7 @@ Progress:
 
     Delete container and create new one, and as long as the volume is mounted the data will persist. 
 
-12. Using Docker Compose: 
+12. Using Docker Compose: Done.
 
     Build all necessary images. 
 
@@ -180,7 +180,7 @@ Progress:
                 image: [image-name-2]
 
                 ports:
-                
+
                   -  "[port1]:[port2]"
 
                   
@@ -191,6 +191,88 @@ Progress:
     docker compose down  : To stop and remove all services. 
 
         
+13. Using Docker Compose with Networks and Volumes: 
+
+    Create network
+
+    Create Volume
+
+    Create Docker Compose File {
+
+        services:
+
+        phpapp:
+
+            container_name: php-instance
+            
+            image: phpapp:v1
+            
+            build: "./5. PHP and MySQL on 2 different containers/application/"
+            
+            depends_on:
+            
+            - mysqlapp
+            
+            networks:
+            
+            - app-network
+            
+            ports:
+            
+            - "80:80"
+            
+        mysqlapp:
+        
+            container_name: mysql-instance
+            
+            image: mysqlapp:v1
+            
+            build: "./7. MySQL database with persistent storage/"
+            
+            volumes:
+            
+            - type: volume
+            
+                source: mysql-data
+                
+                target: /var/lib/mysql
+                
+            networks:
+            
+            - app-network
+            
+            ports:
+            
+            - "3306:3306"
+            
+            environment:
+            
+            - MYSQL_ROOT_PASSWORD=1234
+            
+            - MYSQL_DATABASE=appdb
+            
+
+        networks:
+        
+        app-network:
+        
+            name: "app-network"
+            
+            external: true
+            
+
+        volumes:
+        
+        mysql-data:
+        
+            name: "mysql-data"
+            
+            external: true
+            
+            
+                
+
+    }
 
 
 9. Other important commands:
