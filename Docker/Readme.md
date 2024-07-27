@@ -204,75 +204,79 @@ Progress:
         phpapp:
 
             container_name: php-instance
-            
+
             image: phpapp:v1
-            
+
             build: "./5. PHP and MySQL on 2 different containers/application/"
-            
+
             depends_on:
-            
+
             - mysqlapp
-            
+
             networks:
-            
+
             - app-network
-            
+
             ports:
-            
+
             - "80:80"
-            
+
         mysqlapp:
-        
+
             container_name: mysql-instance
-            
+
             image: mysqlapp:v1
-            
+
             build: "./7. MySQL database with persistent storage/"
-            
+
             volumes:
-            
+
             - type: volume
-            
+
                 source: mysql-data
-                
+
                 target: /var/lib/mysql
-                
+
             networks:
-            
+
             - app-network
-            
+
             ports:
-            
+
             - "3306:3306"
-            
+
             environment:
-            
+
             - MYSQL_ROOT_PASSWORD=1234
-            
+
             - MYSQL_DATABASE=appdb
-            
+
 
         networks:
-        
+
         app-network:
-        
+
             name: "app-network"
-            
+
             external: true
-            
+
 
         volumes:
-        
+
         mysql-data:
-        
+
             name: "mysql-data"
-            
+
             external: true
-            
+
             
                 
 
     }
+
+    docker compose up -d
+
+    docker compose down
 
 
 9. Other important commands:
@@ -295,6 +299,10 @@ Progress:
         docker network rm [network-name] : Deletes the specified network
 
         docker network prune : Deletes unused networks
+
+        docker volume ls : List all volumes
+
+        docker volume prune : Remove all unused volumes
         
 
         docker rmi [image-name] : Deletes specified image
