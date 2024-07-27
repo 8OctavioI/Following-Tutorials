@@ -160,19 +160,29 @@ Progress:
     Create Docker compose file.
 
     docker-compose.yaml {
-        ```
+
             services:
+
               [app-name]:
+
                 container_name: [container-name]
+
                 image: [image-name]
+
                 ports: 
+
                   -  "[port1]:[port2]"
+
               [service-2-name]:
+
                 container-name: [container-name-2]
+
                 image: [image-name-2]
+
                 ports:
+                
                   -  "[port1]:[port2]"
-        ```
+
                   
     }
 
