@@ -27,3 +27,14 @@ Progress:
 2. Write your first program: Done.
 
     I've copied my previous Java learning Files here into "0. Learning" folder
+
+3. Create a Simple Command Line Based Application: Done. 
+
+    Compile: 
+
+        javac [file-name].java
+
+    Run: 
+
+        java [file-name]
+
