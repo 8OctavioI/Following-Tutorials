@@ -65,24 +65,21 @@ class UtilFunctions {
     }
 
     public String getInput(){
-        Scanner2 scn = new Scanner2();
-        String str = scn.scanner.nextLine();
+        Scanner scn = new Scanner(System.in);
+        String str = scn.next();
+        scn.close();
         return str;
+        
     }
 
-}
-
-class Scanner2 {
-    public Scanner scanner;
-    Scanner2(){
-        scanner = new Scanner(System.in);
-    }
 }
 
 
 
 class MortgageCalculator {
+    
     public void run() {
+        UtilFunctions UtilFunctions = new UtilFunctions();
 
         System.out.println("Mortgage Calculator!");
 
@@ -112,6 +109,8 @@ class MortgageCalculator {
 
 class FizzBuzz {
     public void run() {
+        UtilFunctions UtilFunctions = new UtilFunctions();
+
 
         System.out.print("FizzBuzz!!\nEnter a Number: ");
 
