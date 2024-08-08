@@ -1,8 +1,10 @@
 import java.util.Scanner;
 import java.text.NumberFormat;
 
-public class MortgageCalculator {
-    public static void main(String[] args) {
+class MortgageCalculator {
+    public void run() {
+
+        System.out.println("Mortgage Calculator!");
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Principal: ");
