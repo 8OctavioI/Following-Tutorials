@@ -3,52 +3,11 @@ import java.text.NumberFormat;
 
 
 public class Main{
+
+    Scanner scanner = new Scanner(System.in);
     public static void main(String [] args) {
 
-        UtilFunctions UtilFunctions = new UtilFunctions();
         
-        
-
-        int option = -1;
-
-        while (option != 0) {
-            String menu = "Apps: \n" +
-                        "1. Mortgage Calculator\n" +
-                        "2. FizzBuzz\n" + 
-                        "0. Exit\n" +
-                        "Select an app by inputting the number: ";
-
-            System.out.print(menu);
-
-            
-
-            
-
-            String temp = UtilFunctions.getInput();
-
-            while (!UtilFunctions.isNumeric(temp)) {
-                System.out.println("Invalid Option! Try again!! \n " + menu);
-                temp = UtilFunctions.getInput();
-            }
-            
-
-            option = Integer.parseInt(temp);
-
-            switch (option) {
-                case 1:
-                    (new MortgageCalculator()).run();
-                    break;
-                case 2:
-                    (new FizzBuzz()).run();
-                    break;
-
-                default:
-                    System.out.println("Exiting!");
-                    
-            }
-
-            
-        }
         
     }
 }
