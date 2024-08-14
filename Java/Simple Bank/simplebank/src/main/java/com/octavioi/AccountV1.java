@@ -35,10 +35,28 @@ public class AccountV1 implements Bankable {
     }
 
     @Override
+    public Double withdraw(Double amount) throws AmountInvalidException {
+        if (amount > balance) 
+            throw new AmountInvalidException(new InsufficientFundsException());
+        
+        balance -= amount;
+
+        return balance;
+    }
+
+    @Override
     public Double deposit() throws AmountInvalidException{
         //Not implementing Exception here because, it can be handled by the getValidInputFunction. 
         System.out.println("Deposit!");
         balance += UtilFunctions.getValidDoubleInputBetween("Amount to deposit", 0, 10_000);
+        
+        return balance;
+    }
+
+    @Override
+    public Double deposit(Double amount) throws AmountInvalidException{
+        //Not implementing Exception here because, it can be handled by the getValidInputFunction. 
+        balance += amount;
         
         return balance;
     }
