@@ -38,3 +38,8 @@ Progress:
 
         java [file-name]
 
+4. Create Project "learn" to learn the fundamentals of Java: Done.
+
+5. Create Project "MyTube App" to learn about clean code, object oriented programming and interfaces. 
+
+6. Create Project "Simple Bank" to learn about Exceptions. 
