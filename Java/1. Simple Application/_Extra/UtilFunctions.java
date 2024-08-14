@@ -13,6 +13,7 @@ class UtilFunctions {
 
     public void getInput() {
         Scanner scanner = new Scanner(System.in);
+        scanner.close();
     }
 
 }

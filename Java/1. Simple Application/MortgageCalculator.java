@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.lang.reflect.Type;
 import java.text.NumberFormat;
 
 class MortgageCalculator {

@@ -892,7 +892,7 @@ public class App {
         }
 
         int score = 0;
-        int n, p, q;
+        int p, q;
         while (s2.indexOf(t1) != -1) {  
             p  = s2.indexOf(t1);
             q = p + 1; 
@@ -1041,7 +1041,9 @@ public class App {
         int [] pos = {1,2,5,6};
         int[] hel = {10,10,11,11};
         String dirs = "RLRL";
-
+        System.out.println(x);
+        System.out.println(y);
+        
         System.out.println(survivedRobotsHealths(pos, hel, dirs));
 
     }
