@@ -38,7 +38,7 @@ public class AccountV1 implements Bankable {
     public Double deposit() throws AmountInvalidException{
         //Not implementing Exception here because, it can be handled by the getValidInputFunction. 
         System.out.println("Deposit!");
-        balance += UtilFunctions.getValidDoubleInputBetween("Amount to withdraw", 0, 10_000);
+        balance += UtilFunctions.getValidDoubleInputBetween("Amount to deposit", 0, 10_000);
         
         return balance;
     }

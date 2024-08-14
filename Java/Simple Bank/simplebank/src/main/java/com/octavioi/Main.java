@@ -40,69 +40,40 @@ public class Main {
 
                     // Withdraw
                     case 2:{
-                        if (activeAccount == null) {
-                            throw new NoAccessException(new NotLoggedInException());
-                        }
-                        activeAccount.withdraw();
+                        withdraw(activeAccount);
                         break;
                     }
 
                     // Deposit
                     case 3: {
-                        if (activeAccount == null) {
-                            throw new NoAccessException(new NotLoggedInException());
-                        }
-                        activeAccount.deposit();
+                        deposit(activeAccount);
                         break;
                     }
 
                     // Get Balance
                     case 4:{
-                        if (activeAccount == null) {
-                            throw new NoAccessException(new NotLoggedInException());
-                        }
-                        System.out.println("Acquiring Balance!");
-                        System.out.println("Your balance is: " + activeAccount.getBalance());
+                        getBalance(activeAccount);
                         break;
                     }
 
                     // Log in
                     case 5:{
-                        if (activeAccount != null) {
-                            System.out.println("You're already logged in. Log out to log into another account.");
-                            continue;
-                        }
-
-                        Bankable account = logIn(allAvailableAccounts);
-                        if (account == null) System.out.println("Incorrect Username or Password.");
-                        else {
-                            activeAccount = account;
-                            System.out.println("You have been successfully logged in.");
-                        }
+                        activeAccount = logIn(allAvailableAccounts, activeAccount);
                         break;
                     }
 
                     // Log Out
                     case 6:{
-                        if (activeAccount == null) 
-                            throw new NoAccessException(new NotLoggedInException());
-                        activeAccount = null;
-                        System.out.println("You have been logged out.");
+                        activeAccount = logOut(activeAccount);
                         break;
                     }
                 }
             } catch (AmountInvalidException e) {
                 e.printStackTrace();
-                
-                
-
             } catch (NoAccessException e) {
                 e.printStackTrace();
-
             }
         }
-            
-
     }
 
     private static Bankable createAccount() {
@@ -114,16 +85,56 @@ public class Main {
         return new AccountV1(name, balance, password);
     }
     
-    private static Bankable logIn(ArrayList<Bankable> accounts) {
+    private static Bankable logIn(ArrayList<Bankable> accounts, Bankable activeAccount) {
+        if (activeAccount != null) {
+            System.out.println("You're already logged in. Log out to log into another account.");
+            return activeAccount;
+        }
         String name = UtilFunctions.getStringInput("Name");
         String pass = UtilFunctions.getStringInput("Password");
         for (Bankable account : accounts) {
             if (account.getUser().equals(name)) {
                 if ((account.getPass()).equals(pass.hashCode() + "")) {
+                    activeAccount = account;
+                    System.out.println("You have been successfully logged in.");
                     return account;
                 }
             }
         }
+        System.out.println("Incorrect Username or Password.");
         return null;
     }
+
+    private static Bankable logOut(Bankable activeAccount) throws NoAccessException{
+        if (activeAccount == null) 
+            throw new NoAccessException(new NotLoggedInException());
+        activeAccount = null;
+        System.out.println("You have been logged out.");
+        return activeAccount;
+    }
+
+    private static Double getBalance(Bankable activeAccount) throws NoAccessException {
+        if (activeAccount == null) {
+            throw new NoAccessException(new NotLoggedInException());
+        }
+        System.out.println("Acquiring Balance!");
+        System.out.println("Your balance is: " + activeAccount.getBalance());   
+        return activeAccount.getBalance();
+    }
+
+    private static Double deposit(Bankable activeAccount) throws NoAccessException, AmountInvalidException {
+        if (activeAccount == null) {
+            throw new NoAccessException(new NotLoggedInException());
+        }
+        return activeAccount.deposit();
+    }
+
+    private static Double withdraw(Bankable activeAccount) throws NoAccessException, AmountInvalidException {
+        if (activeAccount == null) {
+            throw new NoAccessException(new NotLoggedInException());
+        }
+        return activeAccount.withdraw();
+    }
+
+    
 }
