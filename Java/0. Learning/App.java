@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -259,7 +258,7 @@ public class App {
         int[] arr = new int[k];
         
         arr[0] = nums[0];
-        int j;
+        //int j;
         int count = 1;
         for (int i = 1; i < nums.length; i++) {
             if (count < k) {
@@ -481,7 +480,7 @@ public class App {
     }
 
     static int palindrome(String s, int i) {
-        int x;
+        //int x;
         if (i > s.length()/2) return 1;
         if (s.charAt(i) != s.charAt(s.length() - 1 - i)) return -1;
         else return palindrome(s, i + 1);   
@@ -515,7 +514,9 @@ public class App {
         return s;
     }
     static String longestPalindrome2(String s) {
-        int low = 0, high = s.length();
+        //int low = 0, 
+        int high = s.length();
+
         //n = high;
         if (high == 0) return "";
         char ele = s.charAt(0);
@@ -531,7 +532,8 @@ public class App {
     }
 
     static String longestPalindrome(String s) {
-        int low = 0, high = s.length();
+        //int low = 0, 
+        int high = s.length();
         //n = high;
         for (int i = high; i > 0; i--) {
             for (int j = 0; i + j <= high; j++) {
@@ -544,7 +546,8 @@ public class App {
     }
 
     static String longestPalindrome3(String s) {
-        int low = 0, high = s.length();
+        //int low = 0, 
+        int high = s.length();
         StringBuilder sb = new StringBuilder(s);
         sb = sb.reverse();
         //n = high;
