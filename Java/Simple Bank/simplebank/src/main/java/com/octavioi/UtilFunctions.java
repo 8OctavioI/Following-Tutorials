@@ -27,6 +27,7 @@ public class UtilFunctions {
     public static String getInput() {
         return scanner.nextLine();
     }
+    
 
     public static Integer getValidIntegerInputBetween(String fieldName, int MIN_VALUE, int MAX_VALUE) {
         String temp;

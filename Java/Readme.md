@@ -40,6 +40,12 @@ Progress:
 
 4. Create Project "learn" to learn the fundamentals of Java: Done.
 
-5. Create Project "MyTube App" to learn about clean code, object oriented programming and interfaces. 
+5. Create Project "MyTube App" to learn about clean code, object oriented programming and interfaces: Done.
 
-6. Create Project "Simple Bank" to learn about Exceptions. 
+6. Create Project "Simple Bank" to learn about Exceptions: Done.
+
+7. Implement own List Class to learn generics: Done. 
+
+    A class named "List" was made and tested.
+    
+    Implement v2 of the "Simple Bank" main function that uses the made List

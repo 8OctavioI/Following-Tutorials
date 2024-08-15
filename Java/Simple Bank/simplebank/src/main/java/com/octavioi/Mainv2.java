@@ -1,12 +1,10 @@
 package com.octavioi;
 
-import java.util.ArrayList;
-
 import com.octavioi.Exceptions.AmountInvalidException;
 import com.octavioi.Exceptions.NoAccessException;
 import com.octavioi.Exceptions.NotLoggedInException;
 
-public class Main {
+public class Mainv2 {
 
     private static String menu = "\n\nMenu: \n" +
                                 "1. Create Account\n" +
@@ -20,7 +18,7 @@ public class Main {
     
     public static void main(String[] args) {
         Bankable activeAccount = null;
-        ArrayList<Bankable> allAvailableAccounts = new ArrayList<Bankable>();
+        List<Bankable> allAvailableAccounts = new List<Bankable>();
 
         outer:
         while (true) {
@@ -79,14 +77,15 @@ public class Main {
         return new AccountV1(name, balance, password);
     }
     
-    private static Bankable logIn(ArrayList<Bankable> accounts, Bankable activeAccount) {
+    private static Bankable logIn(List<Bankable> accounts, Bankable activeAccount) {
         if (activeAccount != null) {
             System.out.println("You're already logged in. Log out to log into another account.");
             return activeAccount;
         }
         String name = UtilFunctions.getStringInput("Name");
         String pass = UtilFunctions.getStringInput("Password");
-        for (Bankable account : accounts) {
+        for (int i = 0; i < accounts.length(); i++){ 
+            Bankable account = accounts.get(i);
             if (account.getUser().equals(name)) {
                 if ((account.getPass()).equals(pass.hashCode() + "")) {
                     activeAccount = account;
