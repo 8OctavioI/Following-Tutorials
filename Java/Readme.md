@@ -38,14 +38,24 @@ Progress:
 
         java [file-name]
 
-4. Create Project "learn" to learn the fundamentals of Java: Done.
+4. Learn Fundamentals of Java: Done.
 
-5. Create Project "MyTube App" to learn about clean code, object oriented programming and interfaces: Done.
+    Create Project "learn" to learn the fundamentals of Java.
 
-6. Create Project "Simple Bank" to learn about Exceptions: Done.
+5. Learn OOP, Interfaces and Clean Coding: Done.
+    
+    Create Project "MyTube App" using above principles.
 
-7. Implement own List Class to learn generics: Done. 
+6. Learn about Exceptions: Done.
+    
+    Create Project "Simple Bank" to learn about Exceptions.
+
+7. Learn about Generics: Done.
+
+    Implement own List Generic Class to learn generics. 
 
     A class named "List" was made and tested.
     
-    Implement v2 of the "Simple Bank" main function that uses the made List
+    Implement v2 of the "Simple Bank" main function that uses the made List Generic Class.
+
+    Implement a Generic Method - max in UtilFunctions

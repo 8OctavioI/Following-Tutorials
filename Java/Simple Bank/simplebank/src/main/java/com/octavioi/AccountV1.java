@@ -3,7 +3,7 @@ package com.octavioi;
 import com.octavioi.Exceptions.*;
 
 
-public class AccountV1 implements Bankable {
+public class AccountV1 implements Bankable, Comparable<AccountV1> {
     private Double balance;
     private String name;
     private String password;
@@ -59,6 +59,11 @@ public class AccountV1 implements Bankable {
         balance += amount;
         
         return balance;
+    }
+
+    @Override
+    public int compareTo(AccountV1 item) {
+        return (int) (this.balance - item.balance);
     }
 
     @Override

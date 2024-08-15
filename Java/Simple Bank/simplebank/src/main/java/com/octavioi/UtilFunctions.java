@@ -6,6 +6,12 @@ public class UtilFunctions {
 
     private static Scanner scanner = new Scanner(System.in);
 
+
+    public static <T extends Comparable<T>> T max(T first, T second) {
+        return (first.compareTo(second) > 0) ? first : second;
+    }
+
+    
     public static boolean isDouble(String s) {
         try {
             Double.parseDouble(s);
