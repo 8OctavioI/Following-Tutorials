@@ -84,8 +84,7 @@ public class Mainv2 {
         }
         String name = UtilFunctions.getStringInput("Name");
         String pass = UtilFunctions.getStringInput("Password");
-        for (int i = 0; i < accounts.length(); i++){ 
-            Bankable account = accounts.get(i);
+        for (Bankable account : accounts){ 
             if (account.getUser().equals(name)) {
                 if ((account.getPass()).equals(pass.hashCode() + "")) {
                     activeAccount = account;

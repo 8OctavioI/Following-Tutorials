@@ -11,7 +11,12 @@ public class UtilFunctions {
         return (first.compareTo(second) > 0) ? first : second;
     }
 
+    public static <K, V> void printAsKeyValuePair(K key, V value) {
+        System.out.println(key + ": " + value);
+    }
     
+
+
     public static boolean isDouble(String s) {
         try {
             Double.parseDouble(s);

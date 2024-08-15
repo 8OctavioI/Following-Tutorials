@@ -2,6 +2,13 @@ package com.octavioi;
 
 public class Test {
     public static void main(String[] args) {
+        testingListGenericClass();
+        //testingMultipleParameterGenerics();
+
+
+    }
+
+    public static void testingListGenericClass() {
         Integer[] pos = {1,2,5,6};
         List<Integer> n = new List<Integer>(pos);
         System.out.println(n);
@@ -66,7 +73,13 @@ public class Test {
 
         System.out.println(n);
         System.out.println("Length = " + n.length());
+    }
 
+    public static void testingMultipleParameterGenerics() {
+        KeyValuePair kvp= new KeyValuePair<Integer, String>(Integer.valueOf(1), "Man");
+        KeyValuePair<Integer, String> kvp2= new KeyValuePair(Integer.valueOf(1), "ManMan");
+        System.out.println(kvp + "\n" + kvp2);
+        UtilFunctions.printAsKeyValuePair(2, "Jess");
 
     }
     

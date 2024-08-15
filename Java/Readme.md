@@ -59,3 +59,13 @@ Progress:
     Implement v2 of the "Simple Bank" main function that uses the made List Generic Class.
 
     Implement a Generic Method - max in UtilFunctions
+
+    Implement multiparameter Generic Class & Method
+
+    Practice Using Wildcards.
+
+8. Learn about Collections Framework: 
+
+    Implement Iterate in order to use forEach loop on the List Generic Class.
+
+    

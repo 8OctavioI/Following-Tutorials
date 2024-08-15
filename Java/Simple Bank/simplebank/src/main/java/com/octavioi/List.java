@@ -1,7 +1,8 @@
 package com.octavioi;
 
+import java.util.Iterator;
 
-public class List <T> {
+public class List <T> implements Iterable<T>{
 
     private static final double DEFAULT_SIZE = 10;
 
@@ -72,6 +73,7 @@ public class List <T> {
         for(;temp < count; temp++) {
             this.items[temp] = this.items[temp + 1];
         }
+        this.items[temp] = null;
         count--;
         return temp;
 
@@ -93,13 +95,38 @@ public class List <T> {
     @Override
     public String toString() {
         String res = "[";
-        for (int i = 0; i < count; i++) {
-            res += this.items[i].toString() + ", ";
+        for (T item: this) {
+            res += item + ", ";
         }
         res += "]";
         return res;
 
     }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ListIterator(this);
+    }
+
+    private class ListIterator implements Iterator<T> {
+        private int index;
+        private List<T> list;
+
+        ListIterator(List<T> list){
+            this.index = 0;
+            this.list = list;
+        }
+        @Override
+        public boolean hasNext(){
+            return list.get(index) != null;
+        }
+
+        @Override
+        public T next(){
+            return list.get(index++);  
+        }
+    }
+
 
     
 }
