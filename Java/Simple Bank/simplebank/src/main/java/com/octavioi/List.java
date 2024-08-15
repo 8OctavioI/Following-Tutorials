@@ -1,8 +1,10 @@
 package com.octavioi;
 
-import java.util.Iterator;
 
 public class List <T> {
+
+    private static final double DEFAULT_SIZE = 10;
+
     private T[] items;
     private int count;
     private int MaxIndex;
@@ -12,7 +14,7 @@ public class List <T> {
     }
 
     List(Integer num){
-        MaxIndex = closest10Multiple(num) - 1;
+        MaxIndex = closestDefaultSizeMultiple(num) - 1;
         items = (T[]) new Object[MaxIndex + 1];
         for (count = 0; count < num; count++) {
             items[count] = null;
@@ -21,7 +23,7 @@ public class List <T> {
     }
 
     List(T[] items) {
-        this.MaxIndex = closest10Multiple(items.length) - 1;
+        this.MaxIndex = closestDefaultSizeMultiple(items.length) - 1;
         this.items = (T[]) new Object[MaxIndex + 1];
         count = 0;
         for (T item : items) {
@@ -29,8 +31,8 @@ public class List <T> {
         }
     }
 
-    private int closest10Multiple(int num) {
-        return (int) Math.ceil(num / 10D) * 10;
+    private int closestDefaultSizeMultiple(int num) {
+        return (int) (Math.ceil(num / DEFAULT_SIZE) * DEFAULT_SIZE);
 
     }
 
