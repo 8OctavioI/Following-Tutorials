@@ -18,7 +18,7 @@ public class Mainv2 {
     
     public static void main(String[] args) {
         Bankable activeAccount = null;
-        List<Bankable> allAvailableAccounts = new List<Bankable>();
+        List1<Bankable> allAvailableAccounts = new List1<Bankable>();
         outer:
         while (true) {
             try {
@@ -76,7 +76,7 @@ public class Mainv2 {
         return new AccountV1(name, balance, password);
     }
     
-    private static Bankable logIn(List<Bankable> accounts, Bankable activeAccount) {
+    private static Bankable logIn(List1<Bankable> accounts, Bankable activeAccount) {
         if (activeAccount != null) {
             System.out.println("You're already logged in. Log out to log into another account.");
             return activeAccount;

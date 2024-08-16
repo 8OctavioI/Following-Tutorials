@@ -70,7 +70,7 @@ Progress:
 
     Use Iterable, Collection, List, Queue, Set & Map.
 
-9. Learn about Lambda Functions and Functional Interfaces: 
+9. Learn about Lambda Functions and Functional Interfaces: Done.
 
     1. Create and use a Functional Interface - "Printer" - Functional Interfaces are interfaces that have only one purpose/method. 
 
@@ -89,6 +89,30 @@ Progress:
         Function: Takes in an object and Maps it to another object - Takes Input and Gives Output.
 
         Predicate: Takes in an object and checks something and returns result - Takes Input and Provides boolean output based on condition. 
+
+10. Learn about Streams: 
+
+        Implement a List2 class that implements collection to be able to practice stream - All subclasses of Collection have the ability to stream.
+
+        Do some stream operations on the list. 
+
+        Generate some streams. 
+
+        Practice Mapping streams.
+
+        Practice FlatMapping.
+
+        Practice Filtering
+
+        Practice Slicing (limit, skip, dropWhile, takeWhile)
+
+        Practice distinct
+
+        Practice peek - Peek is used to find output of intermediate streams and then continuing operations. It is the same as forEach but returns the stream in order to keep making operations. 
+
+        Practice Reducers (count, max, min, findAny, findFirst, anyMatch, allMatch, noneMatch)
+
+        Practice Collect
 
     
 

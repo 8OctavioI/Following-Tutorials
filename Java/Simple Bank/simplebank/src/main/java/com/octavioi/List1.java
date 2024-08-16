@@ -1,8 +1,11 @@
 package com.octavioi;
 
-import java.util.Iterator;
 
-public class List <T> implements Iterable<T>{
+import java.util.Iterator;
+import java.util.Collection;
+import java.util.stream.Collector;
+
+public class List1 <T> implements Iterable<T> {//Iterable<T>{
 
     private static final double DEFAULT_SIZE = 10;
 
@@ -10,11 +13,11 @@ public class List <T> implements Iterable<T>{
     private int count;
     private int MaxIndex;
 
-    List() {
+    List1() {
         this(5);
     }
 
-    List(Integer num){
+    List1(Integer num){
         MaxIndex = closestDefaultSizeMultiple(num) - 1;
         items = (T[]) new Object[MaxIndex + 1];
         for (count = 0; count < num; count++) {
@@ -23,7 +26,7 @@ public class List <T> implements Iterable<T>{
         count = 0;
     }
 
-    List(T[] items) {
+    List1(T[] items) {
         this.MaxIndex = closestDefaultSizeMultiple(items.length) - 1;
         this.items = (T[]) new Object[MaxIndex + 1];
         count = 0;
@@ -111,9 +114,9 @@ public class List <T> implements Iterable<T>{
 
     private class ListIterator implements Iterator<T> {
         private int index;
-        private List<T> list;
+        private List1<T> list;
 
-        ListIterator(List<T> list){
+        ListIterator(List1<T> list){
             this.index = 0;
             this.list = list;
         }
