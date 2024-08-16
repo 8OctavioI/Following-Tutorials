@@ -64,8 +64,31 @@ Progress:
 
     Practice Using Wildcards.
 
-8. Learn about Collections Framework: 
+8. Learn about Collections Framework: Done.
 
-    Implement Iterate in order to use forEach loop on the List Generic Class.
+    Implement Iterator using Iterator and Iterable interface in order to use forEach loop on the List Generic Class.
+
+    Use Iterable, Collection, List, Queue, Set & Map.
+
+9. Learn about Lambda Functions and Functional Interfaces: 
+
+    1. Create and use a Functional Interface - "Printer" - Functional Interfaces are interfaces that have only one purpose/method. 
+
+    2. Create and use Anonymous inner classes to implement the same.
+
+    3. Use Lambda Functions to implement the same. - Functional Interfaces can be implemented using lambda functions or anonymous classes.
+
+    4. Use some java built-in Functional Interfaces
+
+    There are 4 types:
+
+        Consumer: Takes in an object - Takes input; No output.
+
+        Supplier: Supplies an object - No input; Gives output.
+
+        Function: Takes in an object and Maps it to another object - Takes Input and Gives Output.
+
+        Predicate: Takes in an object and checks something and returns result - Takes Input and Provides boolean output based on condition. 
 
     
+

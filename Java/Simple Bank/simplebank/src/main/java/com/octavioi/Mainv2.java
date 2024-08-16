@@ -19,7 +19,6 @@ public class Mainv2 {
     public static void main(String[] args) {
         Bankable activeAccount = null;
         List<Bankable> allAvailableAccounts = new List<Bankable>();
-
         outer:
         while (true) {
             try {
