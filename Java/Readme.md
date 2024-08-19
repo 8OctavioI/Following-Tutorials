@@ -116,7 +116,7 @@ Progress:
 
         Practice using Collectors static class.
 
-11. Learn about Multithreading: 
+11. Learn about Multithreading: Done.
 
         Initialize a Thread - Thread thread1 = new Thread(Runnable target);
 
@@ -156,11 +156,41 @@ Progress:
 
                 Use Adders - LongAdded, DoubleAdder - They maintain an array of counters (possibly, one for each thread)that produce a cummulative value when output is asked // This is faster than Synchronization, Atomic Objects, etc., 
 
+                Use Synchronized Collections to make collections that don't face race condition - Again Synchronized  are bad for performance since other threads have to wait for one thread using it. 
+
+                Use Concurrent Collections
+
         Practice Thread Signalling:
 
             object.wait() - Pauses current thread till this object notifies the current thread from another thread
 
             object.notify() / object.notifyAll() - Notifies any waiting thread that the object is done. 
+
+12. Learn about Executive Framework - MultiThreading: 
+
+        Create a Thread Pool - Executors.newFixedThreadPool(2)
+
+        Submit a Runnable to the executor to add to the queue and execute at its convenience - executor.submit(Runnable Task) 
+
+        // Executive Framework does not stop us from having concurrency problems that were discussed earlier. It just simplifies Thread Manipulation.
+
+        Use a callable object instead of a runnable object to get an output - var future = executor.submit(Callable<T>)
+
+        Practice Asynchronous Programming - without blocking main thread:
+
+            Create CompletableFuture Object
+
+            Run a Supplier as ASync - runASync()  / supplyASync()
+
+            Trigger other programs after one is completed - thenApply() / thenAccept() / thenApplyASync()
+
+            handle exceptions using .exceptionally
+
+            Wait for multiple functions to complete - .allOf / .anyOf
+
+            Use timeouts - .completeOnTimeout / .orTimeout
+
+
 
         
 

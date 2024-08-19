@@ -7,6 +7,7 @@ import java.util.concurrent.locks.*;
 import java.util.function.*;
 import java.util.stream.*;
 import java.util.concurrent.*;
+import java.lang.NoSuchFieldException;
 
 import com.octavioi.Movies.Genre;
 
@@ -24,9 +25,12 @@ public class Test {
 
         //testMultiThreads2();
 
-        testMultiThreads3_SolveRaceCondition();
+        //testMultiThreads3_SolveRaceCondition();
 
         //testMultiThreads3_SolveVisibilityProblem();
+
+        //testMultiThreads_ExecutiveFramework();
+        testMultiThreads_ExecutiveFramework2();
 
 
         
@@ -645,6 +649,88 @@ public class Test {
 
 
     }
+
+    public static void testMultiThreads_ExecutiveFramework() {
+        final int availableThreads = Runtime.getRuntime().availableProcessors();
+        var executor = Executors.newFixedThreadPool(availableThreads / 2);
+
+        try {
+            executor.submit(() -> System.out.println("Current: " + Thread.currentThread().getName()));
+            ArrayList<Future<Integer>> futures = new ArrayList<>();
+            for (int i = 0; i < 8; i++) {
+                var random = executor.submit(new RandomNumberGenerator());
+                futures.add(random);
+            }
+            for (var future : futures) {
+                System.out.println("Value: " + future.get()); // This is written in a blocking way, as in the get method makes the main function wait till the future is done processing
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            executor.shutdown();
+        }
+
+    }
+
+    public static void testMultiThreads_ExecutiveFramework2() {
+
+        var future = CompletableFuture.supplyAsync(() ->  {
+            try {
+                Thread.sleep(4000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return (int) (Math.random() * 10);
+        });
+        System.out.println("Fetching Random Number: ");
+
+        future.thenAccept((value) -> System.out.println("Random Value: " + value));
+
+        
+        System.out.println("Mail Sending Started.");
+        MailService.sendASync();
+        System.out.println("Continuing Other Functions...");
+
+        
+
+        var errorThrower = CompletableFuture.supplyAsync(() -> {
+            throw new NullPointerException();
+            }
+            );
+
+            
+        try {
+            Thread.sleep(5000);
+            System.out.println("Handled Exception in thread: " + errorThrower.exceptionally(ex -> 1).get());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Function<Integer, Integer> doubleAnyInt = (num) -> 2*num; 
+
+        CompletableFuture.supplyAsync(() -> (int) (Math.random() * 10))
+                            .thenApply(doubleAnyInt)
+                            .thenAccept(System.out::println); // Running Async programs declaratively
+
+
+    }
+}
+
+class RandomNumberGenerator implements Callable<Integer> {
+    @Override
+    public Integer call() {
+        try {
+            System.out.println("Thread: " + Thread.currentThread().getName());
+            Thread.sleep(3000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (int) (Math.random() * 10);
+        
+    }
 }
 
 
@@ -936,5 +1022,20 @@ class ConsolePrinter implements Printer {
     @Override
     public void print(String message) {
         System.out.println("The message using class is: " + message);
+    }
+}
+
+class MailService {
+    public static void send() { // This is a synchronous method. It will hold up the current thread for 3 seconds.
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Mail was sent");
+    }
+
+    public static CompletableFuture<Void> sendASync() {
+        return CompletableFuture.runAsync(() -> send());
     }
 }
