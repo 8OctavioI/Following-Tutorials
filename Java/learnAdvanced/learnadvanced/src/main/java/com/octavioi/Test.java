@@ -1,13 +1,14 @@
 package com.octavioi;
 
 import java.util.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.LongAdder;
+import java.util.concurrent.locks.*;
 import java.util.function.*;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.*;
+import java.util.concurrent.*;
+
+import com.octavioi.Movies.Genre;
 
 public class Test {
     public static void main(String[] args) {
@@ -17,7 +18,16 @@ public class Test {
 
         //testBuiltInFunctionalInterfaces();
 
-        testStream();
+        //testStream();
+
+        //testMultiThreads();
+
+        //testMultiThreads2();
+
+        testMultiThreads3_SolveRaceCondition();
+
+        //testMultiThreads3_SolveVisibilityProblem();
+
 
         
 
@@ -272,6 +282,13 @@ public class Test {
                 .limit(10) // If limit is not used, it will generate/iterate infinitely. 
                 .forEach(num -> System.out.println(num));
 
+        IntStream.generate(() -> (int) (Math.random() * 10))
+                    .limit(20)
+                    .forEach(System.out::println);
+
+        IntStream.rangeClosed(1, 5)
+                    .forEach(System.out::println);
+
         Consumer<Double> printD = (num) -> System.out.println(num);
 
         Stream.iterate(2D, n -> n + 2)
@@ -279,11 +296,11 @@ public class Test {
                 .forEach(printD);
 
         List<Movies> movies = List.of(
-            new Movies("10", 150, "What", "is", "This"),
-            new Movies("12", 300, "This is"),
-            new Movies("7", 70, "Late", "Call"),
-            new Movies("11", 800, "John", "Jess", "Smith", "Shetty"),
-            new Movies("16", 500, "Smithy", "Jessy", "Johny")
+            new Movies("10", 150, Genre.ACTION, "What", "is", "This"),
+            new Movies("12", 300, Genre.COMEDY, "This is"),
+            new Movies("7", 70, Genre.ACTION, "Late", "Call"),
+            new Movies("11", 800, Genre.THRILLER, "John", "Jess", "Smith", "Shetty"),
+            new Movies("16", 500, Genre.THRILLER, "Smithy", "Jessy", "Johny")
         );
 
         Function<Movies, String> getTitle = (movie) -> movie.getTitle();
@@ -344,7 +361,7 @@ public class Test {
                 .sorted(new TitleComparator())
                 .forEach(printMovie);
 
-        System.out.println("Using Compating method");
+        System.out.println("Using Comparing method");
 
         movies.stream()
                 .sorted(Comparator.comparing(Movies::getLikes))
@@ -354,7 +371,12 @@ public class Test {
 
         var casts = movies.stream()
                 .map(Movies::getCast)
-                .reduce((a, b) -> {a.addAll(b); return a;})
+                .reduce((a, b) -> { 
+                    ArrayList<String> res = new ArrayList<>(); 
+                    res.addAll(a); 
+                    res.addAll(b); 
+                    return res;
+                })
                 .get();
 
         System.out.println(casts);
@@ -371,8 +393,34 @@ public class Test {
                                             .flatMap(m -> m.getCast().stream())
                                             .collect(Collectors.joining(", "));
         
-        System.out.println("Movie Titles: " + castTitles);
+        System.out.println("Movie Castmembers: " + castTitles);
+        
+        System.out.println("Collected as Key: Value: " + movies.stream()
+                                    .collect(Collectors.toMap(Movies::getTitle, Movies::getCast)));
 
+
+        System.out.println("Summary statistics of the likes: " + movies.stream()
+                                    .collect(Collectors.summarizingInt(Movies::getLikes)));
+
+        System.out.println("Summary statistics of the number of cast members: " + movies.stream()
+                                    .map(m -> m.getCast().size())
+                                    .collect(Collectors.summarizingInt(l -> l)));
+
+        
+        System.out.println("Grouped by Genre: " + movies.stream()
+                                    .collect(Collectors.groupingBy(Movies::getGenre, 
+                                            Collectors.mapping(Movies::getTitle, Collectors.toSet()))));
+
+
+        System.out.println("Grouped by Genre: " + movies.stream()
+                                                        .map(m -> m.getTitle()  + "=" + m.getGenre())
+                                                        .collect(Collectors.groupingBy(s -> s.split("=")[1])));
+
+        System.out.println("Partitioned by number of cast members: " + 
+                            movies.stream()
+                                    .collect(Collectors.partitioningBy(m -> m.getCast().size() >= 3, 
+                                                            Collectors.mapping(Movies::getTitle, 
+                                                                                Collectors.joining(", ")))));
         
 
 
@@ -385,8 +433,451 @@ public class Test {
         
     }
     
+    public static void testMultiThreads() {
+        System.out.println(Thread.activeCount());
+        System.out.println(Thread.currentThread().getName());
+        System.out.println(Runtime.getRuntime().availableProcessors());
+
+        startingAThread:;
+
+        Thread thread = new Thread(new DownloadFile());
+
+        
+        // A thread class takes in a object of a class that implements the Runnable interface. 
+
+        // The Runnable interface has one method - run() that gets executed in a new thread when the thread is started. 
+
+        System.out.println("1st Command");
+        thread.start();
+
+        Thread thread2 = new Thread(() -> 
+                                    {
+                                        System.out.println("Current thread: " + Thread.currentThread().getName());
+                                        System.out.println("Downloading a file from thread 2.");
+                                        try {
+                                            Thread.sleep(5000);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        System.out.println("Thread 2 Download complete. " + Thread.currentThread().getName());
+                                    });
+
+        // Alternatively a lambda function can also be used to initiate a thread. 
+
+        System.out.println("2nd Command");
+        for (int i = 0; i < 5; i++) {
+            thread2 = new Thread(() -> 
+                                    {
+                                        System.out.println("2: Downloading a file from " + Thread.currentThread().getName());
+                                        try {
+                                            Thread.sleep(10000);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        System.out.println("2: Download complete. " + Thread.currentThread().getName());
+                                    });
+            thread2.start();
+        }
+        // 5 Downloads will start and complete simultaneously. 
+        System.out.println("Command before downloads of thread 2");
+        try {
+            thread2.join(); // Here it only waits for the completion of the last initialized thread2
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("command after waitign for download to complete");
+        for (int i = 0; i < 5; i++) {
+            System.out.println("3: Downloading a file from " + Thread.currentThread().getName());
+            try {
+                Thread.sleep(5000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("3: Download complete. " + Thread.currentThread().getName());
+            }
+        // Alternatively, doing it in the same thread downloads them one after the other thus wasting time. 
+
+
+        System.out.println("3rd command");
+        System.out.println(Thread.activeCount());
+
+
+
+
+
+
+    }
+
+    public static void testMultiThreads2() {
+        Thread thread1 = new Thread(new DownloadFile2());
+        thread1.start();
+
+        try {
+            Thread.sleep(1_000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        thread1.interrupt(); // The program will be interrupted after 1 second
+
+    }
+
+    public static void testMultiThreads3_SolveRaceCondition() {
+        
+        Status statusA = new Status();
+        LockedStatus statusC = new LockedStatus();
+        SynchronizedStatus statusD = new SynchronizedStatus();
+        AtomicStatus statusE = new AtomicStatus();
+        AdderStatus statusF = new AdderStatus();
+
+        ArrayList<DownloadFile3a> sharedStatusDownloadFiles = new ArrayList<>();
+        ArrayList<DownloadFile3a> lockedStatusDownloadFiles = new ArrayList<>();
+        ArrayList<DownloadFile3b> confinedStatusDownloadFiles = new ArrayList<>();
+        ArrayList<DownloadFile3a> SynchronizedStatusDownloadFiles = new ArrayList<>();
+        ArrayList<DownloadFile3a> atomicStatusDownloadFiles = new ArrayList<>();
+        ArrayList<DownloadFile3a> adderStatusDownloadFiles = new ArrayList<>();
+
+        
+
+        ArrayList<Thread> threadsWithSharedMemory = new ArrayList<>();
+        ArrayList<Thread> threadsWithLockedMemory = new ArrayList<>();
+        ArrayList<Thread> threadsWithConfinedMemory = new ArrayList<>();
+        ArrayList<Thread> threadsWithSynchronizedMemory = new ArrayList<>();
+        ArrayList<Thread> threadsWithAtomicMemory = new ArrayList<>();
+        ArrayList<Thread> threadsWithAdderMemory = new ArrayList<>();
+
+        for (int index = 0; index < 5; index++) {
+            DownloadFile3a tempDownloadFileA = new DownloadFile3a(statusA);
+            DownloadFile3b tempDownloadFileB = new DownloadFile3b();
+            DownloadFile3a tempDownloadFileC = new DownloadFile3a(statusC);
+            DownloadFile3a tempDownloadFileD = new DownloadFile3a(statusD);
+            DownloadFile3a tempDownloadFileE = new DownloadFile3a(statusE);
+            DownloadFile3a tempDownloadFileF = new DownloadFile3a(statusF);
+
+
+            sharedStatusDownloadFiles.add(tempDownloadFileA);
+            lockedStatusDownloadFiles.add(tempDownloadFileC);
+            confinedStatusDownloadFiles.add(tempDownloadFileB);
+            SynchronizedStatusDownloadFiles.add(tempDownloadFileD);
+            atomicStatusDownloadFiles.add(tempDownloadFileD);
+            adderStatusDownloadFiles.add(tempDownloadFileF);
+
+            
+
+            Thread tempA = new Thread(tempDownloadFileA);
+            Thread tempB = new Thread(tempDownloadFileB);
+            Thread tempC = new Thread(tempDownloadFileC);
+            Thread tempD = new Thread(tempDownloadFileD);
+            Thread tempE = new Thread(tempDownloadFileE);
+            Thread tempF = new Thread(tempDownloadFileF);
+
+            tempA.start();
+            tempB.start();
+            tempC.start();
+            tempD.start();
+            tempE.start();
+            tempF.start();
+
+            threadsWithSharedMemory.add(tempA);
+            threadsWithConfinedMemory.add(tempB);
+            threadsWithLockedMemory.add(tempC);
+            threadsWithSynchronizedMemory.add(tempD);
+            threadsWithAtomicMemory.add(tempE);
+            threadsWithAdderMemory.add(tempF);
+        }
+        
+        Consumer<ArrayList<Thread>> joinArrayOfThreads = (threads) -> {
+            for (var thread : threads) {
+                try {
+                    thread.join();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        joinArrayOfThreads.accept(threadsWithSharedMemory);
+        joinArrayOfThreads.accept(threadsWithConfinedMemory);
+        joinArrayOfThreads.accept(threadsWithLockedMemory);
+        joinArrayOfThreads.accept(threadsWithSynchronizedMemory);
+        joinArrayOfThreads.accept(threadsWithAtomicMemory);
+        joinArrayOfThreads.accept(threadsWithAdderMemory);
+        
+        
+        System.out.println("Logged: ");
+        System.out.println("Bytes Logged from ThreadA (Race Condition): " + statusA.getBytes() + " - This also starts working correctly when other solutions were run with it"); // Example of race confinement
+        System.out.println("Bytes Loggen from ThreadB (Confinement): " + confinedStatusDownloadFiles.stream()
+                                                                                        .map(t -> t.getStatus().getBytes())
+                                                                                        .reduce(0, Integer::sum)); // How to solve it.
+        System.out.println("Bytes Logged from ThreadC (Synchronization using locks): " + statusC.getBytes());
+        System.out.println("Bytes Logged from ThreadA (Synchronization using synchronized keyword): " + statusD.getBytes()); 
+        System.out.println("Bytes Logged from ThreadA (Atomic variables): " + statusE.getBytes()); 
+        System.out.println("Bytes Logged from ThreadA (Adder variables): " + statusF.getBytes()); 
+
+
+
+    }
+
+    public static void testMultiThreads3_SolveVisibilityProblem() {
+        DownloadStatus status = new DownloadStatus();
+
+        Thread thread1 = new Thread(new DownloadFile4(status));
+
+        Thread thread2 = new Thread(() -> {
+            if (!status.isDone()) {
+                synchronized (status) {
+                    try {
+                    status.wait(); // Waits for the object to notify. All objects have this functionality. Java requires it to be in a synchronized block.
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            System.out.println(status.getBytes() + ": " + Thread.currentThread().getName());
+        });
+
+
+
+        thread1.start();
+        thread2.start();
+
+
+    }
 }
 
+
+class AtomicStatus implements StatusTrackable{
+    private AtomicInteger bytes = new AtomicInteger();
+
+    AtomicStatus() {
+        this.bytes.set(0);
+    }
+
+    @Override
+    public int getBytes() {
+        return bytes.get();
+    }
+
+    @Override
+    public void incrementBytes() {
+        bytes.incrementAndGet();
+    }
+}
+
+class AdderStatus implements StatusTrackable{
+    private LongAdder bytes = new LongAdder();
+
+    AdderStatus() {
+        
+    }
+
+    @Override
+    public int getBytes() {
+        return bytes.intValue();
+    }
+
+    @Override
+    public void incrementBytes() {
+        bytes.increment();
+    }
+}
+
+interface StatusTrackable {
+    int getBytes();
+    void incrementBytes();
+}
+
+class DownloadStatus {
+
+    private int bytes;
+    private volatile boolean isDone;
+
+    DownloadStatus() {
+        this.bytes = 0;
+        this.isDone = false;
+    }
+
+    public void incrementBytes() {
+        this.bytes++;
+    }
+
+    public int getBytes() {
+        return this.bytes;
+    }
+
+    public boolean isDone() {
+        return this.isDone;
+    }
+
+    public void done() {
+        this.isDone = true;
+    }
+}
+
+class DownloadFile4 implements Runnable {
+    private DownloadStatus status;
+
+    DownloadFile4(DownloadStatus status) {
+        this.status = status;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Downloading a file: " + Thread.currentThread().getName());
+        for (int i = 0; i < 10_240; i++) {
+            status.incrementBytes();
+            for (int j = 0; j < 10_240; j++);
+        }
+        status.done();
+
+        synchronized (status) {
+            try {status.notifyAll();} catch (Exception e) {e.printStackTrace();}
+        }
+        System.out.println("Downloading complete: " + Thread.currentThread().getName());
+
+    }
+
+    public DownloadStatus getStatus() {
+        return this.status;
+    }
+
+
+}
+
+class Status implements StatusTrackable {
+    private int bytes;
+
+    Status() {
+        this.bytes = 0;
+    }
+
+    @Override
+    public int getBytes() {
+        return bytes;
+    }
+
+    @Override
+    public void incrementBytes() {
+        bytes++;
+    }
+}
+
+class LockedStatus implements StatusTrackable {
+    private int bytes;
+    private Lock lock = new ReentrantLock();
+
+    LockedStatus() {
+        this.bytes = 0;
+    }
+    @Override
+    public int getBytes() {
+        return bytes;
+    }
+    @Override
+    public void incrementBytes() {
+        lock.lock();
+        try {
+            bytes++;
+        } 
+        finally {
+            lock.unlock(); // Locks should always be unlocked. So, it is wrapped in a finally block.
+        }
+    }
+}
+
+
+
+class SynchronizedStatus implements StatusTrackable {
+    private int bytes;
+    private Object byteLock = new Object();
+
+    SynchronizedStatus() {
+        this.bytes = 0;
+    }
+
+    public int getBytes() {
+        return bytes;
+    }
+
+    public void incrementBytes() {
+        synchronized (byteLock) { // byteLock object is used here as a monitor object. This is used as a key to monitor the access. 
+            bytes++;
+        }
+    }
+
+    // public synchronized void incrementBytes() {
+    //     bytes++;
+    // }
+    // Can also be written like this. But this would equate to using synchronized (this) which is bad practice since it also won't allow other threads to access other fields of same object.
+}
+
+class DownloadFile implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i < 10240; i++)
+            for (int j = 0; j < 10240; j++);
+
+        System.out.println(Thread.currentThread().getName());
+        
+        System.out.println("Downloading a file.");
+    }
+}
+
+class DownloadFile2 implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Downloading from " + Thread.currentThread().getName());
+        for (int i = 0; i < Integer.MAX_VALUE; i++) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println(Thread.currentThread().getName() + " Interrupted");
+                return;
+            };
+            System.out.println("Downloading byte " + i);
+        }
+    }
+}
+
+class DownloadFile3a implements Runnable {
+    private StatusTrackable status;
+
+    DownloadFile3a(StatusTrackable status) {
+        this.status = status;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 10_000; i++) {
+            status.incrementBytes();
+        }
+    }
+
+    public StatusTrackable getStatus() {
+        return this.status;
+    }
+
+}
+
+class DownloadFile3b implements Runnable {
+    private StatusTrackable status;
+
+    DownloadFile3b() {
+        this.status = new Status();
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 10_000; i++) {
+            status.incrementBytes();
+        }
+    }
+
+    public StatusTrackable getStatus() {
+        return this.status;
+    }
+
+}
 class TitleComparator implements Comparator<Movies>{
     @Override
     public int compare(Movies a, Movies b) {
@@ -398,10 +889,12 @@ class Movies implements Comparable<Movies> {
     private String title;
     private int likes;
     private ArrayList<String> cast = new ArrayList<>();
+    private Genre genre;
 
-    Movies(String title, int likes, String... castMembers) {
+    Movies(String title, int likes, Genre genre, String... castMembers) {
         this.title = title;
         this.likes = likes;
+        this.genre = genre;
         for (var member: castMembers) cast.add(member);
     }
 
@@ -417,10 +910,26 @@ class Movies implements Comparable<Movies> {
         return cast;
     }
 
+    public Genre getGenre(){
+        return genre;
+    }
+
     @Override
     public int compareTo(Movies arg0) {
         return this.likes - arg0.getLikes();
     }
+
+    // @Override
+    // public String toString() {
+    //     Function<Movies, String> toString = (movie) -> movie.getTitle() + ": " + movie.getLikes();
+    //     return toString.apply(this);
+    // }
+
+    enum Genre {
+        COMEDY,
+        ACTION,
+        THRILLER
+    } 
 }
 
 class ConsolePrinter implements Printer {

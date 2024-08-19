@@ -90,7 +90,7 @@ Progress:
 
         Predicate: Takes in an object and checks something and returns result - Takes Input and Provides boolean output based on condition. 
 
-10. Learn about Streams: 
+10. Learn about Streams: Done.
 
         Implement a List2 class that implements collection to be able to practice stream - All subclasses of Collection have the ability to stream.
 
@@ -112,7 +112,60 @@ Progress:
 
         Practice Reducers (count, max, min, findAny, findFirst, anyMatch, allMatch, noneMatch)
 
-        Practice Collect
+        Practice Collect (Partition, Grouping)
+
+        Practice using Collectors static class.
+
+11. Learn about Multithreading: 
+
+        Initialize a Thread - Thread thread1 = new Thread(Runnable target);
+
+        Start a thread - thread1.start()
+
+        You do not need to keep track of the number of threads you use - The JVM takes care of sharing resources and processing units with all threads you create. 
+
+        Pause a thread to give other threads time for execution - Thread.sleep(<time in milliseconds>)
+
+        Join Threads - thread1.join() // The main thread waits for the thread1 to complete processing before proceeding
+
+        Interrupt a thread - thread1.interrupt() // The Runnable object should be programmed to handle the interruption. If it doesn't handle the exception, it will keep executing
+
+        Practice Thread Safety - Race Conditions and Visibility Problem
+
+            Discussion:
+
+                Don't share data between Threads - confinement
+
+                Sharing Immutable objects is fine. 
+
+                Data Access could be locked to one Thread at a time - synchronization
+
+                Synchronization is against the principles of concurrency - can cause deadlock - 2 Threads waiting for each other endlessly. 
+
+                Use Atomic objects - Atomic objects do any modifications in one step, instead of multi steps - JVM makes sure of it.
+
+                Unatomic objects are data that take more than one step to modify:
+
+                    ex: To increment a value by 1, the value has to be read from memory, then incremented by 1 and then stored in memory.
+
+                Partitioning - Multiple threads can access the same collection of data, but can only access a segment of it. Segments won't be shared. 
+
+                Use volatile keyword to avoid Visibility Problem
+
+                Use Atomic Objects
+
+                Use Adders - LongAdded, DoubleAdder - They maintain an array of counters (possibly, one for each thread)that produce a cummulative value when output is asked // This is faster than Synchronization, Atomic Objects, etc., 
+
+        Practice Thread Signalling:
+
+            object.wait() - Pauses current thread till this object notifies the current thread from another thread
+
+            object.notify() / object.notifyAll() - Notifies any waiting thread that the object is done. 
+
+        
+
+
+
 
     
 
