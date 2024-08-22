@@ -1,0 +1,26 @@
+services:
+  mysqlapp:
+    container_name: mysqlapp
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - type: volume
+        source: mysql-data
+        target: /var/lib/mysql
+    networks:
+      - appnetwork
+    environment:
+      - MYSQL_DATABASE=appdb
+      - MYSQL_ROOT_PASSWORD=0000
+
+
+networks:
+  appnetwork:
+    name: appnetwork
+    external: true
+
+volumes:
+  mysql-data:
+    name: mysql-database
+    external: true
