@@ -32,7 +32,7 @@ Progress:
 
         Dependencies are stored in the .m2 file in your system. In Linux it is in the root folder. "~/.m2"
 
-2. JDBC - Java Database Connectivity: 
+2. JDBC - Java Database Connectivity: Done.
 
         It is an API - that gives you the ability to connect to a database from your Java application. 
 
@@ -81,4 +81,148 @@ Progress:
     Close Connection:
 
         connection.close();
+
+3. Spring Framework: 
+
+        IoC - Inversion of Control - As a developer, you don't want to have control over creation, maintenance and deletion of objects. You delegate the control work to Spring. For this, Spring has IoC container. // This is a principle.
+
+        DI - Dependency Injection - Injecting dependencies such as classes, objects, etc,. 
+
+        // This is Design Pattern concepts.
+
+    Implement Dependency Injection using Spring Boot:
+
+        Get the ApplicationContext by the return of the SpringApplication.run() method. This gives you access to the IoC container. 
+
+            ApplicationContext context = SpringApplication.run(******);
+
+        Create a class and annotate it as @Component - This tells Spring that spring should manage this object and not the developer. 
+
+        Get the object from Spring using: <Class-name> <object-name> = context.getBean(<Class-name>.class); // The same as Coder coder = new Coder
+
+        Use the @Autowired annotation to make Spring automatically associate a field with classes that have been annotated as components
+
+        main function has the application context to getBeans from, other classes don't need this context, so we use @Autowired
+
+    Understanding Spring Framework: 
+
+        Using only Spring doesn't give you the context object and other annotation tools. You need to configure them manually
+
+        Manually inject spring context dependency into the maven project. 
+
+        Learn to use XML to get the context:
+
+            new ClassPathXmlApplicationContext(); // will create a container for you and give you the context. 
+
+            Create an XML file in the resources folder in main folder {
+
+                <beans xmlns="http://www.springframework.org/schema/beans"
+
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+                xsi:schemaLocation="http://www.springframework.org/schema/beans
+
+                https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+                    <bean id="coder" class="com.octavioi.Coder"></bean> // They are referenced in singleton scope. i.e: For any call to getBeans we get the same object. Alternatively, we declare scope to be prototype, if we want a new object to be created everytime we get Beans.
+
+                    <bean id="<id>" class="com.<package>.<class-name>" scope="prototype"></bean> // Prototype bean
+
+                    <bean id="laptop" class="com.octavioi.Laptop"></bean>  // These define the objects that Spring needs to handle.
+
+                    // You can also assign values to fields in a class. 
+
+                    <bean id="laptop" class="com.octavioi.Laptop">
+                        <property name="cores" value="4"></property> // This is setter injection - The property should have a setter value is used for primitive types
+                        <property name="cores" ref="core1"></property> // ref is used for object injection into a field - core1 should be id of another bean
+
+                        <constructor-arg ref="laptop"/> // This is constructor injection, we can pass values to constructor 
+
+                        // Constructor arguments should be in sequence
+                    </bean> 
+
+                    // You can also specify autowire="byName" for any property names to be autowired by the name of their ids. you can also autowire by type. 
+                    // If there is ambiguity, use the primary="true" in one of the ambiguous objects for it to take preference. 
+                    // Explicit passing of reference will take precedence over any autowiring. Autowiring doesn't need explicit reference 
+
+                    <bean id="desktop" class="com.octavioi.Desktop" lazy-init="true"/> // Lazy-Init makes sure that the object isn't initialized until the point it used
+
+                    // You can get bean byType or byName
+
+                    // If only one object needs a bean, you shouldn't declare it for the whole App.
+                    // In that case, we declare it in an Inner Bean
+
+                    <bean id="laptop1" class="com.octavio.Laptop">
+                        <property name="core">
+                            <bean id="core1" class="com.octavioi.Core"/>
+                        </property>
+                    </bean>
+                    
+
+
+                </beans>
+            }
+    
+        Learn to use Java Config to get the context:
+            
+            Create a Java File and pass it as an argument to AnnotationConfigApplicationContext() constructor to get context from config file. 
+
+            In the file, you can define beans as methods {
+                
+                @Bean
+
+                public <ClassName> <default-bean-name/method-name>() {
+            
+                    return new <class-constructor>();
+            
+                }
+            
+            }
+
+            Bean annotations can also have arguments to specify name of bean
+
+            You can also change the scope of Bean with @Scope annotation {
+                
+                @Bean
+
+                @Scope(value="prototype")
+            
+            }
+
+            // By default Scope is singleton - only one object is created.
+
+            // Prototype creates a new object everytime getBean is called on this Bean.
+
+            Create a Bean with other objects. You can pass one method to another. 
+
+            // @Primary annotation can be used to define primary bean in case of ambiguity. 
+
+            // @Qualifier("id/name") annotation can also be used in case of ambiguity
+
+        Learn to use Annotations only:
+
+            Here, you define within the Class that they should be used by Spring and Spring will pick up on it
+
+            Use @Component on your classes to let Spring know to manage them. 
+
+            Use @Primary on your classes to specify preference in case of ambiguity
+
+            Use @ComponentScan("base-package-name") in the config file to scan the files for the above mentioned annotations
+
+            @Component("name") can be used to give bean names
+
+            Use @Scope on your classes to declare scope - singleton/prototype
+
+            Use @Value("value") on your fields to provide default value
+
+4. Do the above project using spring boot:
+
+    The same annotations need to be used, but this time Spring Boot will automatically configure everything based on our annotations
+
+    You can use @Service instead of @Component for classes that handle logic and does the service
+
+    @Repository can be used for components that reach out to other stuff, like API/Database
+
+
+
 

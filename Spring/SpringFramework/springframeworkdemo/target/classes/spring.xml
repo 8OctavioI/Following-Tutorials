@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+  https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    
+
+    <bean id="laptop" class="com.octavioi.Laptop"></bean>
+    <bean id="desktop" class="com.octavioi.Desktop"></bean>
+
+    <bean id="coder" class="com.octavioi.Coder">
+        <property name="laptop" ref="laptop"></property>
+    </bean>
+
+    <bean id="coder3" class="com.octavioi.Coder">
+        <property name="laptop">
+            <bean id="lesktop" class="com.octavioi.Laptop"></bean>
+        </property>
+    </bean>
+
+
+    <bean id="coder2" class="com.octavioi.Coder2">
+        <constructor-arg ref="desktop"/>
+    </bean>
+
+</beans>
