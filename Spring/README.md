@@ -223,6 +223,36 @@ Progress:
 
     @Repository can be used for components that reach out to other stuff, like API/Database
 
+5. Make a JDBC project using Spring:
+
+    Create a Maven Spring Project with 2 dependencies:
+
+        1. JDBC API
+
+        2. RDBMS Driver (h2)
+    
+    Create a Student class for which data needs to be stored in the database.
+
+    Create a "schema.sql" file to congigure/set up the database - only use it to configure the database
+
+    Create a "data.sql" to populate the database initially - Use Insert/other commands here. 
+
+    These are used to create a embedded database like h2. 
+
+    For external databases like MySQL:
+
+        import dependencies by adding them to the pom.xml file
+
+        Add spring.datasource.url, spring.datasource.username, spring.datasource.password, spring.datasource.driver-class-name in the application.properties file in the resources. 
+
+        This will be used to connect to an external database. 
+
+    Create a JDBCTemplate object and autowire it so that Spring manages it. 
+
+    Use .query() and .update() to get or manipulate data in database respectively. 
+
+    .query() takes in a RowMapper lambda function that maps each table colomn to a format which we require and returns a list in this format.
+
 
 
 
