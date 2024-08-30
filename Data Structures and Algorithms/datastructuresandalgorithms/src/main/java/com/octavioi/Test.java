@@ -3,11 +3,14 @@ package com.octavioi;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
+import java.util.Queue;
+import java.util.ArrayDeque;
 
 public class Test {
     public static void main(String []args) {
         //testLinkedList();
-        testStack();
+        //testStack();
+        testQueues();
     }
 
     public static void testLinkedList() {
@@ -133,4 +136,46 @@ public class Test {
         return stack.empty();
     }
 
+    public static void testQueues() {
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.offer(10);
+        queue.offer(20);
+        queue.offer(30);
+        queue.offer(40);
+        System.out.println(queue);
+        Integer removed = queue.poll();
+        System.out.println(removed);
+        System.out.println(queue);
+        reverseQueue(queue);
+        System.out.println(queue);
+
+        ArrayQueue1<Integer> queue1 = new ArrayQueue1<>(5);
+        queue1.enqueue(40);
+        queue1.enqueue(50);
+        queue1.enqueue(60);
+        queue1.enqueue(70);
+        System.out.println(queue1);
+        System.out.println(queue1.peek());
+        System.out.println(queue1.deque());
+        System.out.println(queue1);
+        queue1.enqueue(90);
+        System.out.println(queue1);
+        queue1.deque();
+        System.out.println(queue1);
+        queue1.enqueue(100);
+        queue1.enqueue(110);
+        System.out.println(queue1);
+    }
+
+    public static void reverseQueue(Queue<Integer> queue) {
+        Stack<Integer> stack = new Stack<>();
+
+        while (!queue.isEmpty()) {
+            stack.add(queue.remove());
+        }
+        while(!stack.isEmpty()) {
+            queue.add(stack.pop());
+        }
+
+    }
 }
