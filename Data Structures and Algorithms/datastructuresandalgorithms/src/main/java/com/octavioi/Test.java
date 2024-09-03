@@ -7,10 +7,11 @@ import java.util.Queue;
 import java.util.ArrayDeque;
 
 public class Test {
-    public static void main(String []args) {
-        //testLinkedList();
-        //testStack();
-        testQueues();
+    public static void main(String[] args) {
+        // testLinkedList();
+        // testStack();
+        // testQueues();
+        testHashMaps();
     }
 
     public static void testLinkedList() {
@@ -18,7 +19,7 @@ public class Test {
         System.out.println(list);
         list.addLast(10);
         System.out.println(list);
-        
+
         System.out.println(list);
         list.addLast(20);
         System.out.println(list);
@@ -99,39 +100,39 @@ public class Test {
         System.out.println(String.format("Reverse of %s is: %s", string, reverseStringUsingStack(string)));
         System.out.println(String.format("is %s balanced or not: %s", s2, hasBalancedBrackets(s2)));
 
-        
-
     }
 
     public static String reverseStringUsingStack(String s) {
         Stack<Character> stack2 = new Stack<Character>();
 
-        for (var i: s.toCharArray()) stack2.push(i);
+        for (var i : s.toCharArray())
+            stack2.push(i);
 
         StringBuffer res = new StringBuffer();
 
-        while (! stack2.isEmpty() ) {
+        while (!stack2.isEmpty()) {
             res.append(stack2.pop());
         }
         return res.toString();
     }
 
     public static boolean hasBalancedBrackets(String s) {
-        ArrayList<Character> openers = new ArrayList<Character>(Arrays.asList('[', '{', '(','<'));
-        ArrayList<Character> closers = new ArrayList<Character>(Arrays.asList(']', '}', ')','>'));
+        ArrayList<Character> openers = new ArrayList<Character>(Arrays.asList('[', '{', '(', '<'));
+        ArrayList<Character> closers = new ArrayList<Character>(Arrays.asList(']', '}', ')', '>'));
 
         Stack<Character> stack = new Stack<>();
 
         for (var i : s.toCharArray()) {
-            if (openers.contains(i)) stack.push(i);
-            else if(closers.contains(i)) {
-                if (!stack.isEmpty() 
-                    && stack.peek().equals(
-                                    openers.get(closers.indexOf(i)))) {
-                                        stack.pop();
-                                    }
-                else return false;
-            } 
+            if (openers.contains(i))
+                stack.push(i);
+            else if (closers.contains(i)) {
+                if (!stack.isEmpty()
+                        && stack.peek().equals(
+                                openers.get(closers.indexOf(i)))) {
+                    stack.pop();
+                } else
+                    return false;
+            }
         }
         return stack.empty();
     }
@@ -173,9 +174,37 @@ public class Test {
         while (!queue.isEmpty()) {
             stack.add(queue.remove());
         }
-        while(!stack.isEmpty()) {
+        while (!stack.isEmpty()) {
             queue.add(stack.pop());
         }
 
+    }
+
+    public static void testHashMaps() {
+        HashMap1<Integer, String> map = new HashMap1<>(10);
+        // for (int i = 0; i < 15; i++) {
+        //     int key = (int) (Math.random() * 60);
+        //     map.put(key, "v" + key);
+        // }
+
+        map.put(1, "v1");
+        map.put(69, "v69");
+        map.put(31, "v31");
+        map.put(36, "v36");
+        map.put(21, "v21");
+        map.put(41, "v41");
+        map.put(61, "v61");
+        map.put(33, "v33");
+        map.put(66, "v66");
+        map.put(81, "v81");
+        map.put(94, "v94");
+        map.put(51, "v51");
+        map.put(63, "v63");
+
+        System.out.println(map);
+        System.out.println(map.get(21));
+        System.out.println(map);
+        map.remove(21);
+        System.out.println(map);
     }
 }
