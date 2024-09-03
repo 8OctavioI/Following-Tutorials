@@ -11,7 +11,8 @@ public class Test {
         // testLinkedList();
         // testStack();
         // testQueues();
-        testHashMaps();
+        // testHashMaps();
+        testBinaryTree();
     }
 
     public static void testLinkedList() {
@@ -183,8 +184,8 @@ public class Test {
     public static void testHashMaps() {
         HashMap1<Integer, String> map = new HashMap1<>(10);
         // for (int i = 0; i < 15; i++) {
-        //     int key = (int) (Math.random() * 60);
-        //     map.put(key, "v" + key);
+        // int key = (int) (Math.random() * 60);
+        // map.put(key, "v" + key);
         // }
 
         map.put(1, "v1");
@@ -206,5 +207,27 @@ public class Test {
         System.out.println(map);
         map.remove(21);
         System.out.println(map);
+    }
+
+    private static void testBinaryTree() {
+        BinaryTree1 bt = new BinaryTree1();
+        bt.insert(7);
+        bt.insert(4);
+        bt.insert(9);
+        bt.insert(1);
+        bt.insert(6);
+        bt.insert(8);
+        bt.insert(10);
+        System.out.println(bt.find(7));
+        System.out.println(bt.find(9));
+
+        bt.traversePreOrder();
+        System.out.println();
+        bt.traversePostOrder();
+        System.out.println();
+        bt.traverseInOrder();
+        System.out.println();
+
+        System.out.println("Debug.");
     }
 }
